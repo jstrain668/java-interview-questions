@@ -1,0 +1,34 @@
+The command pattern is a behavioral object design pattern. In the command pattern, a
+Command interface declares a method for executing a particular action. Concrete
+Command classes implement the execute() method of the Command interface, and this
+execute() method invokes the appropriate action method of a Receiver class that the
+Concrete Command class contains. The Receiver class performs a particular action. A
+Client class is responsible for creating a Concrete Command and setting the Receiver
+of the Concrete Command. An Invoker class contains a reference to a Command and
+has a method to execute the Command.
+In the command pattern, the invoker is decoupled from the action performed by the
+receiver. The invoker has no knowledge of the receiver. The invoker invokes a
+command, and the command executes the appropriate action of the receiver. Thus, the
+invoker can invoke commands without knowing the details of the action to be
+performed. In addition, this decoupling means that changes to the receiver's action don't
+directly affect the invocation of the action.
+A command is an object whose role is to store all the information required for
+executing an action, including the method to call, the method arguments, and the
+object (known as the receiver) that implements the method.
+A receiver is an object that performs a set of cohesive actions. It’s the component
+that performs the actual action when the command’s execute() method is called.
+An invoker is an object that knows how to execute a given command but doesn’t know
+how the command has been implemented. It only knows the command’s interface.
+A client is an object that controls the command execution process by specifying
+what commands to execute and at what stages of the process to execute them.
+
+Implementation of Command Design Pattern
+
+1. Define a Command interface having an execute method execute().
+2. All command objects must implements a Command interface. The execute
+method delegates the request to a receiver to execute the command.
+3. A receiver class holds the logic of performing any specific task requested
+as command. It is called from execute method of command object.
+4. The client creates a set of command objects and associates receiver with
+it. Client passes commands to invoker to store it. Later, client calls invoker to
+execute the commands.

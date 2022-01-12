@@ -1,0 +1,6 @@
+Why Java's String has the method length() rather than property length (like an array?)
+
+Because length() is defined in CharSequence interface, which is implemented by String. Interfaces can't define
+properties in Java. Also, this makes it more interchangeable with other types
+
+https://stackoverflow.com/questions/26828405/why-javas-string-has-the-method-length-rather-than-property-length-like-an-a

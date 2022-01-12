@@ -1,0 +1,157 @@
+package com.dsa.foundation.trees.bst.inorder;
+
+import com.dsa.foundation.trees.bst.TreeNode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+//Question: Given a binary tree, Print All the Nodes that don’t have siblings.
+//Note: sibling node is the node which has the same parent, so you need to print the nodes who is a single child of
+// his parent.
+
+//Reference: https://algorithms.tutorialhorizon.com/given-a-binary-tree-print-all-the-nodes-that-dont-have-siblings/
+
+
+public class NodesWithSingleChild {
+
+    public TreeNode sortedArrayToBST(int[] values, int start, int end){
+        //Base exit condition
+        if (start > end){
+            return null;
+        }
+
+        //Find and create the mid node
+        int mid = start + (end - start)/2;
+        TreeNode root = new TreeNode(values[mid]);
+
+        //Left subtree is less in value than its parent
+        root.left = sortedArrayToBST(values,start,mid-1);
+        root.right = sortedArrayToBST(values,mid+1,end);
+
+        return root;
+    }
+
+    public void printList(List<Integer> list){
+
+        for (int val : list){
+            System.out.print(val+" ");
+        }
+        System.out.println();
+    }
+
+    public void traversePreOrder(TreeNode node,List<Integer> list){
+
+        if (node != null){
+            list.add(node.val);
+            traversePreOrder(node.left,list);
+            traversePreOrder(node.right,list);
+        }
+    }
+
+    public void traverseInOrder(TreeNode node,List<Integer> list){
+
+        if (node != null){
+            traverseInOrder(node.left,list);
+            list.add(node.val);
+            traverseInOrder(node.right,list);
+        }
+    }
+
+    public void traversePostOrder(TreeNode node,List<Integer> list){
+
+        if (node != null){
+            traversePostOrder(node.left,list);
+            traversePostOrder(node.right,list);
+            list.add(node.val);
+        }
+    }
+
+    public TreeNode insertRecursively(TreeNode root, int val){
+        if (root == null){
+            return new TreeNode(val);
+        }
+
+        if (val < root.val){
+            root.left = insertRecursively(root.left,val);
+        } else {
+            root.right = insertRecursively(root.right,val);
+        }
+
+        return root;
+    }
+
+    public TreeNode insertIteratively(TreeNode root,int val){
+        if (root == null){
+            return new TreeNode(val);
+        }
+
+        TreeNode curr = root;
+        TreeNode parent = null;
+
+        while (curr != null){
+            parent = curr;
+            if (val < curr.val){
+                curr = curr.left;
+            } else{
+                curr = curr.right;
+            }
+        }
+
+        if (val < parent.val){
+            parent.left = new TreeNode(val);
+        } else{
+            parent.right = new TreeNode(val);
+        }
+        return root;
+    }
+
+    //Inorder traversal - check if node has one child and store it in list if one child found
+    //Use pre or post order traversals
+    private void findSingleNodes(TreeNode root,List<Integer> singleNodes){
+
+        if (root == null){
+            return;
+        }
+
+        findSingleNodes(root.left,singleNodes);
+
+        if (root.left == null && root.right != null) {
+            singleNodes.add(root.right.val);
+        }
+        if (root.left != null && root.right == null){
+            singleNodes.add(root.left.val);
+        }
+
+        findSingleNodes(root.right,singleNodes);
+    }
+
+    //Nodes which are single child of parent
+    public List<Integer> findNodesWithOneSibling(TreeNode root)
+    {
+        List<Integer> singleNodes = new ArrayList<>();
+
+        findSingleNodes(root,singleNodes);
+
+        return singleNodes;
+    }
+
+    public static void main(String[] args) {
+        NodesWithSingleChild singleParent = new NodesWithSingleChild();
+
+        int[] values = {22,34,0,36,77,99,33,35};
+        Arrays.sort(values);
+
+        TreeNode root = singleParent.sortedArrayToBST(values,0,values.length-1);
+        singleParent.insertIteratively(root,29);
+
+        List<Integer> list = new ArrayList<>();
+        System.out.println("Inorder:");
+        singleParent.traverseInOrder(root,list);
+        singleParent.printList(list);
+
+        System.out.println("Nodes which are a single child of its parent: ");
+        singleParent.printList(singleParent.findNodesWithOneSibling(root));
+
+    }
+}
